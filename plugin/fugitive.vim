@@ -1442,6 +1442,7 @@ endfunction
 call s:add_methods('buffer',['compare_age'])
 
 function! s:Diff(bang,...)
+  CMiniBufExplorer
   let vert = a:bang ? '' : 'vertical '
   if exists(':DiffGitCached')
     return 'DiffGitCached'
