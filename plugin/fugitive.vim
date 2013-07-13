@@ -1364,8 +1364,8 @@ call s:command("-bar -nargs=* -complete=customlist,s:EditComplete Gsdiff :execut
 
 augroup fugitive_diff
   autocmd!
-  autocmd BufWinLeave * if s:diff_window_count() == 2 && &diff && getbufvar(+expand('<abuf>'), 'git_dir') !=# '' | call s:diffoff_all(getbufvar(+expand('<abuf>'), 'git_dir')) | endif
-  autocmd BufWinEnter * if s:diff_window_count() == 1 && &diff && getbufvar(+expand('<abuf>'), 'git_dir') !=# '' | call s:diffoff() | endif
+  autocmd BufWinLeave * if s:diff_window_count() == 2 && &diff && getbufvar(+expand('<abuf>'), 'git_dir') !=# '' | call s:diffoff_all(getbufvar(+expand('<abuf>'), 'git_dir')) | call s:reopen_mbe() | endif
+  autocmd BufWinEnter * if s:diff_window_count() == 1 && &diff && getbufvar(+expand('<abuf>'), 'git_dir') !=# '' | call s:diffoff() | call s:reopen_mbe() | endif
 augroup END
 
 function! s:diff_window_count()
@@ -1393,6 +1393,13 @@ function! s:diffthis()
   if !&diff
     let w:fugitive_diff_restore = s:diff_restore()
     diffthis
+  endif
+endfunction
+
+function! s:reopen_mbe()
+  if exists(':MiniBufExplorer')
+    MiniBufExplorer
+    wincmd j
   endif
 endfunction
 
@@ -1442,7 +1449,9 @@ endfunction
 call s:add_methods('buffer',['compare_age'])
 
 function! s:Diff(bang,...)
-  CMiniBufExplorer
+  if exists(':CMiniBufExplorer')
+    CMiniBufExplorer
+  endif
   let vert = a:bang ? '' : 'vertical '
   if exists(':DiffGitCached')
     return 'DiffGitCached'
