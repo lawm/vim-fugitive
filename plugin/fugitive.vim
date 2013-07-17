@@ -1397,8 +1397,8 @@ function! s:diffthis()
 endfunction
 
 function! s:reopen_mbe()
-  if exists(':MiniBufExplorer')
-    MiniBufExplorer
+  if exists(':MBEOpen')
+    MBEOpen
     wincmd j
   endif
 endfunction
@@ -1449,8 +1449,8 @@ endfunction
 call s:add_methods('buffer',['compare_age'])
 
 function! s:Diff(bang,...)
-  if exists(':CMiniBufExplorer')
-    CMiniBufExplorer
+  if exists(':MBEClose')
+    MBEClose
   endif
   let vert = a:bang ? '' : 'vertical '
   if exists(':DiffGitCached')
